@@ -1,9 +1,3 @@
-# Spring SSE (Server Side Event)
-
-> 폴링, 웹소켓 말고, 서버 측에서 관리하는 이벤트 발행 기법
-
----
-
 # SseEmitter
 
 > client-server 연결이 진행되고 나서, 지정된 시간만큼 서버에서 발생한 이벤트를 전달 받을 수 있는 기능을 제공한다.
@@ -439,10 +433,6 @@ class SseEmitterEvent {
     }
 }
 ```
-
----
-
-# Stream Event
 
 # Reference
 
