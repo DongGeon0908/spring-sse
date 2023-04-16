@@ -1,4 +1,4 @@
-package com.goofy.sse.service
+package com.goofy.sse.event
 
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter

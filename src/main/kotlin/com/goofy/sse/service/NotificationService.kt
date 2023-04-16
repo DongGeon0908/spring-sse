@@ -1,7 +1,8 @@
 package com.goofy.sse.service
 
+import com.goofy.sse.event.SseEmitterEvent
 import com.goofy.sse.model.NotificationEventModel
-import com.goofy.sse.service.SseEmitterEvent.Companion.send
+import com.goofy.sse.event.SseEmitterEvent.Companion.send
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
