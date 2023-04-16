@@ -440,6 +440,29 @@ class SseEmitterEvent {
 }
 ```
 
+### Example Response
+
+```text
+id:1
+event:sse event with SSE EMITTER
+retry:10000
+:SSE%EB%A5%BC+%ED%99%9C%EC%9A%A9%ED%95%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8+%EB%A3%A8%ED%94%84
+data:{"id":1,"message":"hello world","createdAt":"2023-04-16T23:46:15.982"}
+
+id:2
+event:sse event with SSE EMITTER
+retry:10000
+:SSE%EB%A5%BC+%ED%99%9C%EC%9A%A9%ED%95%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8+%EB%A3%A8%ED%94%84
+data:{"id":2,"message":"hello world","createdAt":"2023-04-16T23:46:15.984"}
+
+id:3
+event:sse event with SSE EMITTER
+retry:10000
+:SSE%EB%A5%BC+%ED%99%9C%EC%9A%A9%ED%95%9C+%EC%9D%B4%EB%B2%A4%ED%8A%B8+%EB%A3%A8%ED%94%84
+data:{"id":3,"message":"hello world","createdAt":"2023-04-16T23:46:15.989"}
+
+```
+
 ---
 
 # Stream Event
