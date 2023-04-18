@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.net.URLEncoder
 import java.time.ZonedDateTime
+import java.util.*
 import kotlin.random.Random
 
 @Service
@@ -37,6 +38,13 @@ class NotificationService(
 
     fun count(): Int {
         return notificationRepository.count()
+    }
+
+    fun get(id: UUID): NotificationResponse {
+        val notification = notificationRepository.findByIdOrNull(id)
+            ?: throw RuntimeException("not found notification")
+
+        return NotificationResponse.from(notification)
     }
 
     fun notifyV1(): SseEmitter {
