@@ -1,10 +1,15 @@
 package com.goofy.sse.controller
 
 import com.goofy.sse.service.NotificationService
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
+import java.util.concurrent.Executors
+
 
 @RestController
 class NotificationController(
@@ -39,4 +44,15 @@ class NotificationController(
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun notifyV3() = notificationService.notifyV3()
+
+    private val executor = Executors.newCachedThreadPool()
+
+    @GetMapping(
+        path = ["/api/v4/notifications"],
+        produces = [MediaType.TEXT_EVENT_STREAM_VALUE]
+    )
+    fun handleRbe(): ResponseEntity<ResponseBodyEmitter> {
+        val response = notificationService.notifyV4()
+        return ResponseEntity(response, HttpStatus.OK)
+    }
 }

@@ -11,6 +11,7 @@ import com.goofy.sse.repository.NotificationRepository
 import mu.KotlinLogging
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Service
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import reactor.core.publisher.Flux
 import java.net.URLEncoder
@@ -118,5 +119,35 @@ class NotificationService(
                         )
                     ).build()
             }
+    }
+
+    fun notifyV4(): ResponseBodyEmitter {
+        val emitter = ResponseBodyEmitter()
+
+        val responseBodyEmitterExecutor = generateExecutor(threadNamePrefix = "sse-emitter", poolSize = 1)
+
+        responseBodyEmitterExecutor.execute {
+            var i = 0
+            while (i != -1) {
+                i++
+                try {
+                    val data = NotificationEventModel(
+                        id = UUID.randomUUID(),
+                        title = "title title",
+                        content = "hello world",
+                        createdAt = ZonedDateTime.now()
+                    )
+
+                    emitter.send(data)
+                } catch (ex: Exception) {
+                    emitter.completeWithError(ex)
+                    i = -1
+                }
+            }
+        }
+
+        responseBodyEmitterExecutor.shutdown()
+
+        return emitter
     }
 }
