@@ -4,9 +4,9 @@ import com.goofy.sse.common.utis.RandomUtils.Companion.getRandomString
 import com.goofy.sse.common.utis.ThreadManagerUtilsOrigin.Companion.generateExecutor
 import com.goofy.sse.dto.NotificationResponse
 import com.goofy.sse.entity.Notification
-import com.goofy.sse.event.SseEmitterEvent
-import com.goofy.sse.event.SseEmitterEvent.Companion.send
-import com.goofy.sse.model.NotificationEventModel
+import com.goofy.sse.event.NotificationEventModel
+import com.goofy.sse.event.sseemitter.SseEmitterEvent
+import com.goofy.sse.event.sseemitter.SseEmitterEvent.Companion.send
 import com.goofy.sse.repository.NotificationRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
@@ -59,8 +59,9 @@ class NotificationService(
                 i++
                 runCatching {
                     val data = NotificationEventModel(
-                        id = i.toLong(),
-                        message = "hello world",
+                        id = UUID.randomUUID(),
+                        title = "title title",
+                        content = "hello world",
                         createdAt = ZonedDateTime.now()
                     )
 
