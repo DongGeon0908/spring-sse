@@ -1,18 +1,43 @@
 package com.goofy.sse.service
 
+import com.goofy.sse.common.utis.RandomUtils.Companion.getRandomString
 import com.goofy.sse.common.utis.ThreadManagerUtilsOrigin.Companion.generateExecutor
+import com.goofy.sse.dto.NotificationResponse
+import com.goofy.sse.entity.Notification
 import com.goofy.sse.event.SseEmitterEvent
 import com.goofy.sse.event.SseEmitterEvent.Companion.send
 import com.goofy.sse.model.NotificationEventModel
+import com.goofy.sse.repository.NotificationRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.net.URLEncoder
 import java.time.ZonedDateTime
+import kotlin.random.Random
 
 @Service
-class NotificationService {
+class NotificationService(
+    private val notificationRepository: NotificationRepository
+) {
     private val logger = KotlinLogging.logger {}
+
+    fun testAdd(): NotificationResponse {
+        val notification = Notification(
+            uid = Random.nextLong(),
+            title = getRandomString(10),
+            content = getRandomString(5000),
+            createdAt = ZonedDateTime.now(),
+            modifiedAt = ZonedDateTime.now()
+        )
+
+        val savedNotification = notificationRepository.save(notification)
+
+        return NotificationResponse.from(savedNotification)
+    }
+
+    fun count(): Int {
+        return notificationRepository.count()
+    }
 
     fun notifyV1(): SseEmitter {
         val emitter = SseEmitterEvent.generate(180000)
