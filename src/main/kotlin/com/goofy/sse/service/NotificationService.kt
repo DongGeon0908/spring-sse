@@ -1,5 +1,6 @@
 package com.goofy.sse.service
 
+import com.goofy.sse.common.utis.ThreadManagerUtilsOrigin.Companion.generateExecutor
 import com.goofy.sse.event.SseEmitterEvent
 import com.goofy.sse.event.SseEmitterEvent.Companion.send
 import com.goofy.sse.model.NotificationEventModel
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.net.URLEncoder
 import java.time.ZonedDateTime
-import java.util.concurrent.Executors
 
 @Service
 class NotificationService {
@@ -18,9 +18,9 @@ class NotificationService {
         val emitter = SseEmitterEvent.generate(180000)
 
         // 가능하면, 코루틴으로
-        val sseMvcExecutor = Executors.newSingleThreadExecutor()
+        val sseExecutor = generateExecutor(threadNamePrefix = "sse-emitter", poolSize = 1)
 
-        sseMvcExecutor.execute {
+        sseExecutor.execute {
             var i = 0
             while (i != -1) {
                 i++
@@ -48,7 +48,7 @@ class NotificationService {
             }
         }
 
-        sseMvcExecutor.shutdown()
+        sseExecutor.shutdown()
 
         return emitter
     }
