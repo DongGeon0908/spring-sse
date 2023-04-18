@@ -27,4 +27,16 @@ class NotificationController(
         produces = [MediaType.TEXT_EVENT_STREAM_VALUE]
     )
     fun notifyV1() = notificationService.notifyV1()
+
+    @GetMapping(
+        path = ["/api/v2/notifications"],
+        produces = [MediaType.TEXT_EVENT_STREAM_VALUE]
+    )
+    fun notifyV2() = notificationService.notifyV2()
+
+    @GetMapping(
+        path = ["/api/v3/notifications"],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun notifyV3() = notificationService.notifyV3()
 }

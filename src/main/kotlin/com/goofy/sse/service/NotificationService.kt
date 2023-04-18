@@ -9,12 +9,16 @@ import com.goofy.sse.event.sseemitter.SseEmitterEvent
 import com.goofy.sse.event.sseemitter.SseEmitterEvent.Companion.send
 import com.goofy.sse.repository.NotificationRepository
 import mu.KotlinLogging
+import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
+import reactor.core.publisher.Flux
 import java.net.URLEncoder
+import java.time.Duration
 import java.time.ZonedDateTime
 import java.util.*
 import kotlin.random.Random
+
 
 @Service
 class NotificationService(
@@ -85,5 +89,34 @@ class NotificationService(
         sseExecutor.shutdown()
 
         return emitter
+    }
+
+    fun notifyV2(): Flux<NotificationEventModel> {
+        return Flux.interval(Duration.ofSeconds(1))
+            .map {
+                NotificationEventModel(
+                    id = UUID.randomUUID(),
+                    title = "title title",
+                    content = "hello world",
+                    createdAt = ZonedDateTime.now()
+                )
+            }
+    }
+
+    fun notifyV3(): Flux<ServerSentEvent<NotificationEventModel>> {
+        return Flux.interval(Duration.ofSeconds(1))
+            .map { sequence: Long ->
+                ServerSentEvent.builder<NotificationEventModel>()
+                    .id(sequence.toString())
+                    .event("periodic-event")
+                    .data(
+                        NotificationEventModel(
+                            id = UUID.randomUUID(),
+                            title = "title title",
+                            content = "hello world",
+                            createdAt = ZonedDateTime.now()
+                        )
+                    ).build()
+            }
     }
 }
