@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
-import java.util.concurrent.Executors
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 
 
 @RestController
@@ -45,14 +45,21 @@ class NotificationController(
     )
     fun notifyV3() = notificationService.notifyV3()
 
-    private val executor = Executors.newCachedThreadPool()
-
     @GetMapping(
         path = ["/api/v4/notifications"],
-        produces = [MediaType.TEXT_EVENT_STREAM_VALUE]
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun handleRbe(): ResponseEntity<ResponseBodyEmitter> {
+    fun notifyV4(): ResponseEntity<ResponseBodyEmitter> {
         val response = notificationService.notifyV4()
+        return ResponseEntity(response, HttpStatus.OK)
+    }
+
+    @GetMapping(
+        path = ["/api/v5/notifications"],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    fun notifyV5(): ResponseEntity<StreamingResponseBody> {
+        val response = notificationService.notifyV5()
         return ResponseEntity(response, HttpStatus.OK)
     }
 }

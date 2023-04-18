@@ -13,7 +13,9 @@ import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody
 import reactor.core.publisher.Flux
+import java.io.OutputStream
 import java.net.URLEncoder
 import java.time.Duration
 import java.time.ZonedDateTime
@@ -149,5 +151,22 @@ class NotificationService(
         responseBodyEmitterExecutor.shutdown()
 
         return emitter
+    }
+
+    fun notifyV5(): StreamingResponseBody {
+        return StreamingResponseBody { out: OutputStream ->
+            var i = 0
+            while (i != -1) {
+                i++
+                val data = NotificationEventModel(
+                    id = UUID.randomUUID(),
+                    title = "title title",
+                    content = "hello world",
+                    createdAt = ZonedDateTime.now()
+                )
+
+                out.write(data.toString().toByteArray())
+            }
+        }
     }
 }
